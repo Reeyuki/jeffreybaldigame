@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Jeffrey Epstein Basics In Education And Kidnapping!</title>
+    <meta name="color-scheme" content="dark">
+    <style>
+      :root{
+        --bg:#0b0d12;
+        --panel:#111526;
+        --panel2:#0f1320;
+        --text:#e9ecff;
+        --muted:#a7afcf;
+        --accent:#7c5cff;
+        --accent2:#23c7ff;
+        --border:rgba(255,255,255,.08);
+        --shadow:0 10px 40px rgba(0,0,0,.55);
+      }
+      html,body{height:100%;}
+      body{
+        margin:0;
+        background:radial-gradient(1200px 700px at 30% 10%, rgba(124,92,255,.25), transparent 55%),
+                   radial-gradient(1000px 600px at 80% 0%, rgba(35,199,255,.18), transparent 50%),
+                   var(--bg);
+        color:var(--text);
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+        overflow:hidden;
+      }
+      #unity-container{
+        position:fixed;
+        inset:0;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+      }
+      #unity-canvas{
+        width:100vw;
+        height:100vh;
+        outline:none;
+        display:block;
+        background:#000;
+      }
+      #hud{
+        position:fixed;
+        inset:0;
+        pointer-events:none;
+      }
+      #loading{
+        position:absolute;
+        left:50%;
+        top:50%;
+        transform:translate(-50%,-50%);
+        width:min(560px, calc(100vw - 40px));
+        background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+        border:1px solid var(--border);
+        border-radius:16px;
+        box-shadow:var(--shadow);
+        padding:18px 18px 16px;
+        pointer-events:auto;
+        backdrop-filter: blur(10px);
+      }
+      #loading-title{
+        font-weight:700;
+        letter-spacing:.2px;
+        margin:0 0 10px 0;
+        font-size:14px;
+        color:var(--text);
+      }
+      #loading-sub{
+        margin:0 0 12px 0;
+        font-size:12px;
+        color:var(--muted);
+      }
+      #progress{
+        height:10px;
+        border-radius:999px;
+        background:rgba(255,255,255,.06);
+        border:1px solid var(--border);
+        overflow:hidden;
+      }
+      #progress > div{
+        height:100%;
+        width:0%;
+        background:linear-gradient(90deg, var(--accent), var(--accent2));
+        border-radius:999px;
+        transition:width .12s ease;
+      }
+      #percent{
+        margin-top:10px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:10px;
+        font-size:12px;
+        color:var(--muted);
+      }
+      #percent strong{color:var(--text); font-weight:700;}
+      #fullscreen{
+        position:fixed;
+        right:12px;
+        top:12px;
+        z-index:20;
+        pointer-events:auto;
+        border:1px solid var(--border);
+        background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+        color:var(--text);
+        border-radius:12px;
+        padding:10px 12px;
+        font-size:12px;
+        font-weight:700;
+        letter-spacing:.2px;
+        cursor:pointer;
+        box-shadow:0 8px 22px rgba(0,0,0,.45);
+      }
+      #fullscreen:active{transform:translateY(1px);}
+      #error{
+        margin-top:10px;
+        font-size:12px;
+        color:#ffb4b4;
+        display:none;
+        white-space:pre-wrap;
+      }
+      @media (prefers-reduced-motion: reduce){
+        #progress > div{transition:none;}
+      }
+    </style>
+  </head>
+  <body>
+    <div id="unity-container">
+      <canvas id="unity-canvas" tabindex="-1"></canvas>
+    </div>
+    <div id="hud">
+      <button id="fullscreen" type="button" title="Fullscreen">Fullscreen</button>
+      <div id="loading" role="status" aria-live="polite">
+        <p id="loading-title">Loading…</p>
+        <p id="loading-sub">Downloading game files</p>
+        <div id="progress"><div id="progress-bar"></div></div>
+        <div id="percent"><span id="loading-text">Starting…</span><strong id="loading-percent">0%</strong></div>
+        <div id="error"></div>
+      </div>
+    </div>
+    <script>
+      const canvas = document.querySelector("#unity-canvas");
+      const loading = document.querySelector("#loading");
+      const loadingText = document.querySelector("#loading-text");
+      const loadingPercent = document.querySelector("#loading-percent");
+      const progressBar = document.querySelector("#progress-bar");
+      const fullscreenButton = document.querySelector("#fullscreen");
+      const errorBox = document.querySelector("#error");
+
+      const ASSET_BASE_URL = "https://cdn.jsdelivr.net/gh/reeyuki/jeffreybaldigame@main//";
+      const BUILD_BASE_URL = ASSET_BASE_URL + "Build/";
+
+      const FILES = {
+        loaderJs: BUILD_BASE_URL + "jeffreyepsteinreeyuki.loader.js",
+        frameworkJs: BUILD_BASE_URL + "jeffreyepsteinreeyuki.framework.js",
+        dataChunks: [
+          { url: BUILD_BASE_URL + "jeffreyepsteinreeyuki.data00", bytes: 10485760 },
+          { url: BUILD_BASE_URL + "jeffreyepsteinreeyuki.data01", bytes: 10485760 },
+          { url: BUILD_BASE_URL + "jeffreyepsteinreeyuki.data02", bytes: 10485760 },
+          { url: BUILD_BASE_URL + "jeffreyepsteinreeyuki.data03", bytes: 10485760 },
+          { url: BUILD_BASE_URL + "jeffreyepsteinreeyuki.data04", bytes: 10485760 },
+          { url: BUILD_BASE_URL + "jeffreyepsteinreeyuki.data05", bytes: 4722872 },
+        ],
+        wasmChunks: [
+          { url: BUILD_BASE_URL + "jeffreyepsteinreeyuki.wasm00", bytes: 10485760 },
+          { url: BUILD_BASE_URL + "jeffreyepsteinreeyuki.wasm01", bytes: 10485760 },
+          { url: BUILD_BASE_URL + "jeffreyepsteinreeyuki.wasm02", bytes: 2622152 },
+        ],
+      };
+
+      function setProgress(pct, text) {
+        const clamped = Math.max(0, Math.min(100, pct));
+        progressBar.style.width = clamped.toFixed(1) + "%";
+        loadingPercent.textContent = Math.round(clamped) + "%";
+        if (text) loadingText.textContent = text;
+      }
+
+      function showError(message) {
+        errorBox.style.display = "block";
+        errorBox.textContent = message;
+      }
+
+      async function fetchArrayBufferWithProgress(url, expectedBytes, onBytes) {
+        const res = await fetch(url, { cache: "force-cache" });
+        if (!res.ok) throw new Error(`Fetch failed (${res.status}) for ${url}`);
+
+        if (!res.body) {
+          const buf = await res.arrayBuffer();
+          onBytes?.(buf.byteLength);
+          return buf;
+        }
+
+        const reader = res.body.getReader();
+        const chunks = [];
+        let received = 0;
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          chunks.push(value);
+          received += value.byteLength;
+          onBytes?.(value.byteLength);
+          if (expectedBytes) {
+            // keep UI responsive even when Unity progress is 0 early on
+            await new Promise((r) => requestAnimationFrame(r));
+          }
+        }
+
+        const out = new Uint8Array(received);
+        let offset = 0;
+        for (const c of chunks) {
+          out.set(c, offset);
+          offset += c.byteLength;
+        }
+        return out.buffer;
+      }
+
+      async function downloadAndJoin(chunks, label, overall) {
+        let downloaded = 0;
+        const buffers = [];
+        for (let i = 0; i < chunks.length; i++) {
+          const part = chunks[i];
+          setProgress((overall.bytesDone / overall.bytesTotal) * 100, `${label} (${i + 1}/${chunks.length})…`);
+          const buf = await fetchArrayBufferWithProgress(part.url, part.bytes, (b) => {
+            overall.bytesDone += b;
+            downloaded += b;
+            setProgress((overall.bytesDone / overall.bytesTotal) * 100, `${label} (${i + 1}/${chunks.length})…`);
+          });
+          buffers.push(buf);
+        }
+
+        const total = buffers.reduce((n, b) => n + b.byteLength, 0);
+        const joined = new Uint8Array(total);
+        let offset = 0;
+        for (const b of buffers) {
+          joined.set(new Uint8Array(b), offset);
+          offset += b.byteLength;
+        }
+        return joined.buffer;
+      }
+
+      function loadScript(src) {
+        return new Promise((resolve, reject) => {
+          const s = document.createElement("script");
+          s.src = src;
+          s.async = true;
+          s.onload = resolve;
+          s.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+          document.head.appendChild(s);
+        });
+      }
+
+      async function boot() {
+        // Mobile UX: scale to full screen and prevent zoom.
+        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+          const meta = document.createElement("meta");
+          meta.name = "viewport";
+          meta.content = "width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes";
+          document.head.appendChild(meta);
+        }
+
+        const overall = {
+          bytesDone: 0,
+          bytesTotal:
+            FILES.dataChunks.reduce((n, p) => n + p.bytes, 0) +
+            FILES.wasmChunks.reduce((n, p) => n + p.bytes, 0),
+        };
+
+        setProgress(0, "Preparing downloads…");
+
+        const dataBuffer = await downloadAndJoin(FILES.dataChunks, "Downloading data", overall);
+        const wasmBuffer = await downloadAndJoin(FILES.wasmChunks, "Downloading code", overall);
+
+        setProgress(100, "Starting Unity…");
+
+        const dataUrl = URL.createObjectURL(new Blob([dataBuffer]));
+        const codeUrl = URL.createObjectURL(new Blob([wasmBuffer], { type: "application/wasm" }));
+
+        await loadScript(FILES.loaderJs);
+
+        const config = {
+          dataUrl,
+          frameworkUrl: FILES.frameworkJs,
+          codeUrl,
+          streamingAssetsUrl: ASSET_BASE_URL + "StreamingAssets",
+          companyName: "DefaultCompany",
+          productName: "Jeffrey Epstein Basics In Education And Kidnapping!",
+          productVersion: "1.4.3",
+        };
+
+        const unityInstance = await createUnityInstance(canvas, config, (p) => {
+          // Unity's own progress covers instantiation; keep our UI but avoid going backwards.
+          const pct = 100 * Math.max(0, Math.min(1, p));
+          setProgress(Math.max(100, pct), "Initializing…");
+        });
+
+        loading.style.display = "none";
+        fullscreenButton.onclick = () => unityInstance.SetFullscreen(1);
+      }
+
+      boot().catch((err) => {
+        console.error(err);
+        showError(String(err && err.message ? err.message : err));
+        loadingText.textContent = "Failed to load.";
+      });
+
+    </script>
+  </body>
+</html>
