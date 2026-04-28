@@ -6,137 +6,95 @@
     <title>Jeffrey Epstein Basics In Education And Kidnapping!</title>
     <meta name="color-scheme" content="dark">
     <style>
-      :root{
-        --bg:#0b0d12;
-        --panel:#111526;
-        --panel2:#0f1320;
-        --text:#e9ecff;
-        --muted:#a7afcf;
-        --accent:#7c5cff;
-        --accent2:#23c7ff;
-        --border:rgba(255,255,255,.08);
-        --shadow:0 10px 40px rgba(0,0,0,.55);
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        background: #0b0d12;
+        color: #e9ecff;
+        font: 13px/1.5 ui-sans-serif, system-ui, sans-serif;
+        height: 100vh;
+        overflow: hidden;
       }
-      html,body{height:100%;}
-      body{
-        margin:0;
-        background:radial-gradient(1200px 700px at 30% 10%, rgba(124,92,255,.25), transparent 55%),
-                   radial-gradient(1000px 600px at 80% 0%, rgba(35,199,255,.18), transparent 50%),
-                   var(--bg);
-        color:var(--text);
-        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-        overflow:hidden;
+      #unity-canvas {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        display: block;
+        background: #000;
+        outline: none;
       }
-      #unity-container{
-        position:fixed;
-        inset:0;
-        display:flex;
-        align-items:center;
-        justify-content:center;
+      #hud {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
       }
-      #unity-canvas{
-        width:100vw;
-        height:100vh;
-        outline:none;
-        display:block;
-        background:#000;
+      #loading {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: min(520px, calc(100vw - 40px));
+        background: rgba(255,255,255,.05);
+        border: 1px solid rgba(255,255,255,.09);
+        border-radius: 14px;
+        padding: 20px;
+        pointer-events: auto;
+        backdrop-filter: blur(8px);
       }
-      #hud{
-        position:fixed;
-        inset:0;
-        pointer-events:none;
+      #loading-title { font-weight: 700; margin-bottom: 6px; }
+      #loading-sub { font-size: 12px; color: #a7afcf; margin-bottom: 14px; }
+      #progress {
+        height: 8px;
+        border-radius: 999px;
+        background: rgba(255,255,255,.07);
+        overflow: hidden;
       }
-      #loading{
-        position:absolute;
-        left:50%;
-        top:50%;
-        transform:translate(-50%,-50%);
-        width:min(560px, calc(100vw - 40px));
-        background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-        border:1px solid var(--border);
-        border-radius:16px;
-        box-shadow:var(--shadow);
-        padding:18px 18px 16px;
-        pointer-events:auto;
-        backdrop-filter: blur(10px);
+      #progress-bar {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #7c5cff, #23c7ff);
+        border-radius: 999px;
+        transition: width .12s ease;
       }
-      #loading-title{
-        font-weight:700;
-        letter-spacing:.2px;
-        margin:0 0 10px 0;
-        font-size:14px;
-        color:var(--text);
+      #percent {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 8px;
+        font-size: 12px;
+        color: #a7afcf;
       }
-      #loading-sub{
-        margin:0 0 12px 0;
-        font-size:12px;
-        color:var(--muted);
+      #loading-percent { font-weight: 700; color: #e9ecff; }
+      #fullscreen {
+        position: fixed;
+        right: 12px;
+        top: 12px;
+        z-index: 20;
+        pointer-events: auto;
+        background: rgba(255,255,255,.08);
+        border: 1px solid rgba(255,255,255,.1);
+        color: #e9ecff;
+        border-radius: 10px;
+        padding: 8px 12px;
+        font: 700 12px ui-sans-serif, system-ui, sans-serif;
+        cursor: pointer;
       }
-      #progress{
-        height:10px;
-        border-radius:999px;
-        background:rgba(255,255,255,.06);
-        border:1px solid var(--border);
-        overflow:hidden;
-      }
-      #progress > div{
-        height:100%;
-        width:0%;
-        background:linear-gradient(90deg, var(--accent), var(--accent2));
-        border-radius:999px;
-        transition:width .12s ease;
-      }
-      #percent{
-        margin-top:10px;
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        gap:10px;
-        font-size:12px;
-        color:var(--muted);
-      }
-      #percent strong{color:var(--text); font-weight:700;}
-      #fullscreen{
-        position:fixed;
-        right:12px;
-        top:12px;
-        z-index:20;
-        pointer-events:auto;
-        border:1px solid var(--border);
-        background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
-        color:var(--text);
-        border-radius:12px;
-        padding:10px 12px;
-        font-size:12px;
-        font-weight:700;
-        letter-spacing:.2px;
-        cursor:pointer;
-        box-shadow:0 8px 22px rgba(0,0,0,.45);
-      }
-      #fullscreen:active{transform:translateY(1px);}
-      #error{
-        margin-top:10px;
-        font-size:12px;
-        color:#ffb4b4;
-        display:none;
-        white-space:pre-wrap;
-      }
-      @media (prefers-reduced-motion: reduce){
-        #progress > div{transition:none;}
-      }
+      #fullscreen:active { transform: translateY(1px); }
+      #error { margin-top: 10px; font-size: 12px; color: #ffb4b4; display: none; white-space: pre-wrap; }
+      @media (prefers-reduced-motion: reduce) { #progress-bar { transition: none; } }
     </style>
   </head>
   <body>
-    <div id="unity-container">
-      <canvas id="unity-canvas" tabindex="-1"></canvas>
-    </div>
+    <canvas id="unity-canvas" tabindex="-1"></canvas>
     <div id="hud">
-      <button id="fullscreen" type="button" title="Fullscreen">Fullscreen</button>
+      <button id="fullscreen" type="button">Fullscreen</button>
       <div id="loading" role="status" aria-live="polite">
         <p id="loading-title">Loading…</p>
         <p id="loading-sub">Downloading game files</p>
         <div id="progress"><div id="progress-bar"></div></div>
-        <div id="percent"><span id="loading-text">Starting…</span><strong id="loading-percent">0%</strong></div>
+        <div id="percent">
+          <span id="loading-text">Starting…</span>
+          <strong id="loading-percent">0%</strong>
+        </div>
         <div id="error"></div>
       </div>
     </div>
@@ -182,16 +140,14 @@
         errorBox.textContent = message;
       }
 
-      async function fetchArrayBufferWithProgress(url, expectedBytes, onBytes) {
+      async function fetchChunk(url, expectedBytes, onBytes) {
         const res = await fetch(url, { cache: "force-cache" });
         if (!res.ok) throw new Error(`Fetch failed (${res.status}) for ${url}`);
-
         if (!res.body) {
           const buf = await res.arrayBuffer();
           onBytes?.(buf.byteLength);
           return buf;
         }
-
         const reader = res.body.getReader();
         const chunks = [];
         let received = 0;
@@ -201,43 +157,31 @@
           chunks.push(value);
           received += value.byteLength;
           onBytes?.(value.byteLength);
-          if (expectedBytes) {
-            // keep UI responsive even when Unity progress is 0 early on
-            await new Promise((r) => requestAnimationFrame(r));
-          }
+          await new Promise((r) => requestAnimationFrame(r));
         }
-
         const out = new Uint8Array(received);
         let offset = 0;
-        for (const c of chunks) {
-          out.set(c, offset);
-          offset += c.byteLength;
-        }
+        for (const c of chunks) { out.set(c, offset); offset += c.byteLength; }
         return out.buffer;
       }
 
-      async function downloadAndJoin(chunks, label, overall) {
-        let downloaded = 0;
-        const buffers = [];
-        for (let i = 0; i < chunks.length; i++) {
-          const part = chunks[i];
-          setProgress((overall.bytesDone / overall.bytesTotal) * 100, `${label} (${i + 1}/${chunks.length})…`);
-          const buf = await fetchArrayBufferWithProgress(part.url, part.bytes, (b) => {
-            overall.bytesDone += b;
-            downloaded += b;
-            setProgress((overall.bytesDone / overall.bytesTotal) * 100, `${label} (${i + 1}/${chunks.length})…`);
-          });
-          buffers.push(buf);
-        }
-
+      function joinBuffers(buffers) {
         const total = buffers.reduce((n, b) => n + b.byteLength, 0);
-        const joined = new Uint8Array(total);
+        const out = new Uint8Array(total);
         let offset = 0;
-        for (const b of buffers) {
-          joined.set(new Uint8Array(b), offset);
-          offset += b.byteLength;
-        }
-        return joined.buffer;
+        for (const b of buffers) { out.set(new Uint8Array(b), offset); offset += b.byteLength; }
+        return out.buffer;
+      }
+
+      async function downloadParallel(chunks, overall) {
+        const buffers = new Array(chunks.length);
+        await Promise.all(chunks.map((part, i) =>
+          fetchChunk(part.url, part.bytes, (b) => {
+            overall.bytesDone += b;
+            setProgress((overall.bytesDone / overall.bytesTotal) * 100, "Downloading…");
+          }).then((buf) => { buffers[i] = buf; })
+        ));
+        return joinBuffers(buffers);
       }
 
       function loadScript(src) {
@@ -252,7 +196,6 @@
       }
 
       async function boot() {
-        // Mobile UX: scale to full screen and prevent zoom.
         if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
           const meta = document.createElement("meta");
           meta.name = "viewport";
@@ -269,8 +212,10 @@
 
         setProgress(0, "Preparing downloads…");
 
-        const dataBuffer = await downloadAndJoin(FILES.dataChunks, "Downloading data", overall);
-        const wasmBuffer = await downloadAndJoin(FILES.wasmChunks, "Downloading code", overall);
+        const [dataBuffer, wasmBuffer] = await Promise.all([
+          downloadParallel(FILES.dataChunks, overall),
+          downloadParallel(FILES.wasmChunks, overall),
+        ]);
 
         setProgress(100, "Starting Unity…");
 
@@ -290,9 +235,7 @@
         };
 
         const unityInstance = await createUnityInstance(canvas, config, (p) => {
-          // Unity's own progress covers instantiation; keep our UI but avoid going backwards.
-          const pct = 100 * Math.max(0, Math.min(1, p));
-          setProgress(Math.max(100, pct), "Initializing…");
+          setProgress(Math.max(100, 100 * Math.max(0, Math.min(1, p))), "Initializing…");
         });
 
         loading.style.display = "none";
@@ -301,10 +244,9 @@
 
       boot().catch((err) => {
         console.error(err);
-        showError(String(err && err.message ? err.message : err));
+        showError(String(err?.message ?? err));
         loadingText.textContent = "Failed to load.";
       });
-
     </script>
   </body>
 </html>
